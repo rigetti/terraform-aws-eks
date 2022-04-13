@@ -57,7 +57,7 @@ variable "stream_shard_count" {
 variable "stream_retention_hours" {
   description = "The number of hours data will be retained in the stream. See: https://docs.aws.amazon.com/streams/latest/dev/kinesis-extended-retention.html"
   type        = number
-  default     = 1
+  default     = 24
 }
 
 variable "enable_stream_encryption" {

@@ -54,7 +54,7 @@ have an AWS Organization or already have a Kinesis data stream you want to re-us
 | <a name="input_expel_aws_account_arn"></a> [expel\_aws\_account\_arn](#input\_expel\_aws\_account\_arn) | Expel's AWS Account ARN to allow assuming role to gain EKS access. | `string` | `"arn:aws:iam::012205512454:user/ExpelCloudService"` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | A prefix to group all Expel integration resources. | `string` | `"expel-aws-eks"` | no |
 | <a name="input_stream_capacity_mode"></a> [stream\_capacity\_mode](#input\_stream\_capacity\_mode) | The data stream capacity mode: ON\_DEMAND (recommended) or PROVISIONED. See: https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html | `string` | `"ON_DEMAND"` | no |
-| <a name="input_stream_retention_hours"></a> [stream\_retention\_hours](#input\_stream\_retention\_hours) | The number of hours data will be retained in the stream. See: https://docs.aws.amazon.com/streams/latest/dev/kinesis-extended-retention.html | `number` | `1` | no |
+| <a name="input_stream_retention_hours"></a> [stream\_retention\_hours](#input\_stream\_retention\_hours) | The number of hours data will be retained in the stream. See: https://docs.aws.amazon.com/streams/latest/dev/kinesis-extended-retention.html | `number` | `24` | no |
 | <a name="input_stream_shard_count"></a> [stream\_shard\_count](#input\_stream\_shard\_count) | The number of shards for the Kinesis stream. Only required if `stream_capacity_mode` is `PROVISIONED`. See: https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html | `number` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A set of tags to group resources. | `map` | `{}` | no |
 ## Outputs
