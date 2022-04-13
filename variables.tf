@@ -37,9 +37,9 @@ variable "eks_log_group_name" {
 }
 
 variable "stream_capacity_mode" {
-  description     = "The data stream capacity mode: ON_DEMAND (recommended) or PROVISIONED. See: https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html"
-  type            = string
-  default         = "ON_DEMAND"
+  description = "The data stream capacity mode: ON_DEMAND (recommended) or PROVISIONED. See: https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html"
+  type        = string
+  default     = "ON_DEMAND"
 
   validation {
     condition     = var.stream_capacity_mode == "ON_DEMAND" || var.stream_capacity_mode == "PROVISIONED"

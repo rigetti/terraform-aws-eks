@@ -2,17 +2,17 @@
 data "aws_iam_policy_document" "assume_role_iam_document" {
   # Allow Expel to assume the role
   statement {
-    actions       = ["sts:AssumeRole"]
-    effect        = "Allow"
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
     principals {
       type        = "AWS"
       identifiers = [var.expel_aws_account_arn]
     }
 
     condition {
-      test        = "StringEquals"
-      variable    = "sts:ExternalId"
-      values      = [var.expel_customer_organization_guid]
+      test     = "StringEquals"
+      variable = "sts:ExternalId"
+      values   = [var.expel_customer_organization_guid]
     }
   }
 }
@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "eks_consumer_iam_document" {
 
   # Allow Expel Workbench to retrieve data from Kinesis
   statement {
-    actions   = [
+    actions = [
       "kinesis:DescribeLimits",
       "kinesis:DescribeStream",
       "kinesis:DescribeStreamSummary",
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "eks_consumer_iam_document" {
 
   # Allow Expel Workbench to gather information about EKS clusters
   statement {
-    actions   = [
+    actions = [
       "eks:AccessKubernetesApi",
       "eks:DescribeCluster",
       "eks:DescribeNodegroup",
