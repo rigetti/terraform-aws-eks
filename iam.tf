@@ -34,6 +34,8 @@ resource "aws_iam_policy" "eks_consumer_policy" {
   tags   = local.tags
 }
 
+# ignoring as these policies enable necessary observability on all EKS resources
+# tfsec:ignore:aws-iam-no-policy-wildcards
 data "aws_iam_policy_document" "eks_consumer_iam_document" {
 
   # Allow Expel Workbench to retrieve data from Kinesis
