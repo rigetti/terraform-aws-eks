@@ -12,10 +12,11 @@ module "expel_aws_eks" {
 
   expel_customer_organization_guid = "Replace with your organization GUID from Expel Workbench"
   region = "AWS region in which Kinesis data stream will be created"
+  eks_log_group_name = "The log group name for EKS logs to integration with Expel Workbench"
 }
 ```
 Once you have configured your AWS environment, go to
-https://workbench.expel.io/settings/security-devices?setupIntegration=aws and create an AWS EKS
+https://workbench.expel.io/settings/security-devices?setupIntegration=kubernetes_eks and create an AWS EKS
 security device to enable Expel to begin monitoring your AWS environment.
 
 ## Permissions
