@@ -7,7 +7,7 @@ Configures a CloudWatch subscription filter to send data to a Kinesis data strea
 ## Usage
 ```hcl
 module "expel_aws_eks" {
-  source  = "expel-io/cloudtrail/eks"
+  source  = "expel-io/k8-control-plane/aws"
   version = "1.1.0"
 
   expel_customer_organization_guid = "Replace with your organization GUID from Expel Workbench"
