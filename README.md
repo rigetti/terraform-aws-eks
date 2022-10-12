@@ -4,6 +4,8 @@ Terraform module for configuring Amazon EKS to integrate with [Expel Workbench](
 Configures a CloudWatch subscription filter to send data to a Kinesis data stream that
 [Expel Workbench](https://workbench.expel.io/) consumes.
 
+:exclamation: Terraform state may contain sensitive information. Please follow best security practices when securing your state.
+
 ## Usage
 ```hcl
 module "expel_aws_eks" {
