@@ -62,7 +62,8 @@ data "aws_iam_policy_document" "eks_consumer_iam_document" {
       "eks:ListNodegroups",
       "eks:ListUpdates",
       "sts:GetCallerIdentity",
-      "ec2:DescribeRegions"
+      "ec2:DescribeRegions",
+      "autoscaling:DescribeAutoScalingGroups"
     ]
     resources = ["*"]
     effect    = "Allow"
