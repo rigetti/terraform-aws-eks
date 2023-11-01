@@ -61,7 +61,7 @@ resource "kubernetes_cluster_role_binding" "example" {
     name      = "expel-reader-clusterrole"
   }
   subject {
-    kind      = "User"
-    name      = "expel-user"
+    kind = "User"
+    name = "expel-user"
   }
 }
