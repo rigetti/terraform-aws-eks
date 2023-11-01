@@ -21,10 +21,10 @@ module "expel_aws_eks_integration" {
 
   expel_customer_organization_guid = var.expel_customer_organization_guid
   expel_assume_role_session_name   = "ExpelServiceAssumeRoleForEKSAccess"
-  eks_log_group_name = var.eks_log_group_name
-  stream_capacity_mode = "ON_DEMAND"
-  stream_retention_hours = 24
-  enable_stream_encryption = true
+  eks_log_group_name               = var.eks_log_group_name
+  stream_capacity_mode             = "ON_DEMAND"
+  stream_retention_hours           = 24
+  enable_stream_encryption         = true
 
   prefix = "expel-aws-eks"
   tags = {

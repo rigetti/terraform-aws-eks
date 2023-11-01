@@ -1,6 +1,6 @@
 resource "kubernetes_cluster_role" "expel-reader-clusterrole" {
   metadata {
-    name = "expel-reader-clusterrole"
+    name = var.expel_k8s_cluster_role_name
   }
 
   rule {
@@ -58,10 +58,10 @@ resource "kubernetes_cluster_role_binding" "example" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = "expel-reader-clusterrole"
+    name      = var.expel_k8s_cluster_role_name
   }
   subject {
     kind = "User"
-    name = "expel-user"
+    name = var.expel_k8s_user_name
   }
 }
