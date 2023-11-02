@@ -17,6 +17,54 @@ module "expel_aws_eks" {
   eks_log_group_name = "The log group name for EKS logs to integration with Expel Workbench"
 }
 ```
+
+### Enabling k8s API read only access
+This module does not map the Expel ARN to the kubernetes `expel-user` (necessary for our Benchmark Report). This requires modifying the `aws-auth` config map either through `eksctl` or terraform.
+
+### 1. Using `eksctl`
+
+`eksctl` can update this map for you by running:
+```
+eksctl create iamidentitymapping \
+    --cluster <your-cluster-name> \
+    --region <your-region> \
+    --arn <your-expel-role-arn> \
+    --username expel-user
+```
+
+You can confirm the mapping is created by running:
+```
+eksctl get iamidentitymapping --cluster <your-cluster-name> --region <your-region>
+```
+
+**Full AWS docs** [here](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html
+).
+
+### 2. Using terraform
+If you are using the official [EKS AWS module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest) you can update this with your existing eks module
+```
+module "eks" {
+  [...]
+
+  # aws-auth configmap
+  manage_aws_auth_configmap = true
+
+  aws_auth_users = [
+    {
+      userarn  = <your-expel-role-arn>
+      username = "expel-user"
+      groups   = []
+    },
+  ]
+```
+
+### Validating mapping configuration
+Once completed you can confirm the mapping is created by running:
+```
+eksctl get iamidentitymapping --cluster <your-cluster-name> --region <your-region>
+```
+
+### Finishing steps
 Once you have configured your AWS environment, go to
 https://workbench.expel.io/settings/security-devices?setupIntegration=kubernetes_eks and create an AWS EKS
 security device to enable Expel to begin monitoring your AWS environment.
@@ -28,7 +76,6 @@ The permissions allocated by this module allow Expel Workbench to perform invest
 1. Only supports onboarding a single AWS account, not an entire AWS Organization.
 2. Will always create a new CloudWatch subscription filter (AWS has a limit of 2 subscription filters per CloudWatch log group)
 3. Will always create a new Kinesis data stream.
-4. Does not modify cluster configuration to grant Expel's IAM role read-only access (must be done separately)
 
 See Expel's Getting Started Guide for Amazon EKS for options if you
 have an AWS Organization or already have a Kinesis data stream you want to re-use.
