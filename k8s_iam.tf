@@ -51,7 +51,7 @@ resource "kubernetes_cluster_role" "expel-reader-clusterrole" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "example" {
+resource "kubernetes_cluster_role_binding" "expel-reader-cluster-role-binding" {
   metadata {
     name = "expel-reader-clusterrolebinding"
   }
