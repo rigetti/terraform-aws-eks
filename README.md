@@ -41,7 +41,7 @@ eksctl get iamidentitymapping --cluster <your-cluster-name> --region <your-regio
 ).
 
 ### 2. Using terraform
-If you are using the official [EKS AWS module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest) you can update this with your existing eks module
+If you are using the official [EKS AWS module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest) you can update this with your existing EKS module
 ```
 module "eks" {
   [...]
