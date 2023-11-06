@@ -65,3 +65,15 @@ variable "enable_stream_encryption" {
   type        = bool
   default     = true
 }
+
+variable "expel_k8s_user_name" {
+  description = "User for k8s Benchmark Report poller"
+  type        = string
+  default     = "expel-user"
+}
+
+variable "expel_k8s_cluster_role_name" {
+  description = "ClusterRole for Benchmark Report poller permissions."
+  type        = string
+  default     = "expel-reader-clusterrole"
+}

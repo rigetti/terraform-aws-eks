@@ -44,5 +44,3 @@ data "aws_iam_policy_document" "eks_producer_iam_document" {
     effect    = "Allow"
   }
 }
-
-
