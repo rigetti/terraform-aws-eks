@@ -1,12 +1,45 @@
-# terraform-aws-eks
-Terraform module for configuring Amazon EKS to integrate with [Expel Workbench](https://workbench.expel.io/).
+# Terraform AWS EKS
 
-Configures a CloudWatch subscription filter to send data to a Kinesis data stream that
-[Expel Workbench](https://workbench.expel.io/) consumes.
+This Terraform module is designed to configure Amazon Elastic Kubernetes Service (EKS) to integrate with [Expel Workbench](https://workbench.expel.io/). The module sets up a CloudWatch subscription filter to send data to a Kinesis data stream, which is then consumed by Expel Workbench.
 
-:exclamation: Terraform state may contain sensitive information. Please follow best security practices when securing your state.
+> **Note** Terraform state may contain sensitive information. Please follow best security practices when securing your state.
+
+## Table of Contents
+
+- [Features](#features)
+- [Usage](#usage)
+- [Enabling k8s API Read-Only Access](#enabling-k8s-api-read-only-access)
+  - [Using `eksctl`](#1-using-eksctl)
+  - [Using Terraform](#2-using-terraform)
+- [AWS Documentation](#aws-documentation)
+- [Finishing Steps](#finishing-steps)
+- [Permissions](#permissions)
+- [Example](#example)
+- [Limitations](#limitations)
+- [Requirements](#requirements)
+- [Providers](#providers)
+- [Inputs](#inputs)
+- [Outputs](#outputs)
+- [Resources](#resources)
+- [Contributing](wip.CONTRIBUTING.md)
+
+## Features
+
+This Terraform module offers the following features:
+
+- **Amazon EKS Integration**: Seamlessly integrates your Amazon EKS setup with Expel Workbench for enhanced security monitoring.
+- **CloudWatch Subscription Filter**: Automatically configures a CloudWatch subscription filter to send data to a Kinesis data stream.
+- **Kinesis Data Stream**: Sets up a Kinesis data stream that is consumed by Expel Workbench, providing real-time data for security monitoring.
+- **Kubernetes API Read-Only Access**: Provides instructions for enabling read-only access to the Kubernetes API, either through `eksctl` or directly through Terraform.
+- **AWS Documentation**: Links to the full AWS documentation for additional guidance and support.
+- **Security Device Setup**: Guides you through the process of creating an AWS EKS security device on Expel Workbench to start monitoring your AWS environment.
+- **Permissions**: Allocates permissions that allow Expel Workbench to perform investigations and gain a broad understanding of your AWS footprint.
+- **Limitations**: Clearly outlines the limitations of the module, such as only supporting the onboarding of a single AWS account and always creating a new CloudWatch subscription filter and Kinesis data stream.
 
 ## Usage
+
+The use this module in a Terraform Script, users need to replace certain placeholders with their specific values, such as their organization's GUID from Expel Workbench, the AWS region where the Kinesis data stream will be created, and the log group name for EKS logs.
+
 ```hcl
 module "expel_aws_eks" {
   source  = "expel-io/k8s-control-plane/aws"
@@ -19,12 +52,14 @@ module "expel_aws_eks" {
 ```
 
 ### Enabling k8s API read only access
+
 This module does not map the Expel ARN to the kubernetes `expel-user` (necessary for our Benchmark Report). This requires modifying the `aws-auth` config map either through `eksctl` or terraform.
 
 ### 1. Using `eksctl`
 
 `eksctl` can update this map for you by running:
-```
+
+``` shell
 eksctl create iamidentitymapping \
     --cluster <your-cluster-name> \
     --region <your-region> \
@@ -33,16 +68,16 @@ eksctl create iamidentitymapping \
 ```
 
 You can confirm the mapping is created by running:
-```
+
+``` shell
 eksctl get iamidentitymapping --cluster <your-cluster-name> --region <your-region>
 ```
 
-**Full AWS docs** [here](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html
-).
-
 ### 2. Using terraform
+
 If you are using the official [EKS AWS module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest) you can update this with your existing EKS module
-```
+
+``` hcl
 module "eks" {
   [...]
 
@@ -58,21 +93,33 @@ module "eks" {
   ]
 ```
 
+### AWS Documentation
+
+You can find the full AWS documentation [here](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html).
+
 ### Validating mapping configuration
+
 Once completed you can confirm the mapping is created by running:
-```
+
+``` shell
 eksctl get iamidentitymapping --cluster <your-cluster-name> --region <your-region>
 ```
 
 ### Finishing steps
+
 Once you have configured your AWS environment, go to
-https://workbench.expel.io/settings/security-devices?setupIntegration=kubernetes_eks and create an AWS EKS
-security device to enable Expel to begin monitoring your AWS environment.
+[https://workbench.expel.io/settings/security-devices?setupIntegration=kubernetes_eks](https://workbench.expel.io/settings/security-devices?setupIntegration=kubernetes_eks) and create an AWS EKS security device to enable Expel to begin monitoring your AWS environment.
 
 ## Permissions
+
 The permissions allocated by this module allow Expel Workbench to perform investigations and get a broad understanding of your AWS footprint.
 
+## Example
+
+You can find an example of how to use this module in the [examples](examples) directory.
+
 ## Limitations
+
 1. Only supports onboarding a single AWS account, not an entire AWS Organization.
 2. Will always create a new CloudWatch subscription filter (AWS has a limit of 2 subscription filters per CloudWatch log group)
 3. Will always create a new Kinesis data stream.
@@ -91,7 +138,8 @@ have an AWS Organization or already have a Kinesis data stream you want to re-us
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.9.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -101,6 +149,8 @@ have an AWS Organization or already have a Kinesis data stream you want to re-us
 | <a name="input_enable_stream_encryption"></a> [enable\_stream\_encryption](#input\_enable\_stream\_encryption) | Optionally encrypt data in the Kinesis stream with a Kinesis-owned KMS key. | `bool` | `true` | no |
 | <a name="input_expel_assume_role_session_name"></a> [expel\_assume\_role\_session\_name](#input\_expel\_assume\_role\_session\_name) | The session name Expel will use when authenticating. | `string` | `"ExpelEKSServiceSession"` | no |
 | <a name="input_expel_aws_account_arn"></a> [expel\_aws\_account\_arn](#input\_expel\_aws\_account\_arn) | Expel's AWS Account ARN to allow assuming role to gain EKS access. | `string` | `"arn:aws:iam::012205512454:user/ExpelCloudService"` | no |
+| <a name="input_expel_k8s_cluster_role_name"></a> [expel\_k8s\_cluster\_role\_name](#input\_expel\_k8s\_cluster\_role\_name) | ClusterRole for Benchmark Report poller permissions. | `string` | `"expel-reader-clusterrole"` | no |
+| <a name="input_expel_k8s_user_name"></a> [expel\_k8s\_user\_name](#input\_expel\_k8s\_user\_name) | User for k8s Benchmark Report poller | `string` | `"expel-user"` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | A prefix to group all Expel integration resources. | `string` | `"expel-aws-eks"` | no |
 | <a name="input_stream_capacity_mode"></a> [stream\_capacity\_mode](#input\_stream\_capacity\_mode) | The data stream capacity mode: ON\_DEMAND (recommended) or PROVISIONED. See: https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html | `string` | `"ON_DEMAND"` | no |
 | <a name="input_stream_retention_hours"></a> [stream\_retention\_hours](#input\_stream\_retention\_hours) | The number of hours data will be retained in the stream. See: https://docs.aws.amazon.com/streams/latest/dev/kinesis-extended-retention.html | `number` | `24` | no |
@@ -126,6 +176,8 @@ have an AWS Organization or already have a Kinesis data stream you want to re-us
 | [aws_iam_role_policy_attachment.eks_consumer_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.eks_producer_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_kinesis_stream.kinesis_data_stream](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kinesis_stream) | resource |
+| [kubernetes_cluster_role.expel-reader-clusterrole](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/cluster_role) | resource |
+| [kubernetes_cluster_role_binding.expel-reader-cluster-role-binding](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/cluster_role_binding) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.assume_role_iam_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.cloudwatch_assume_role_iam_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
