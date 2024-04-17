@@ -1,3 +1,24 @@
+/**
+ * This Terraform configuration file sets up the required providers and version constraints,
+ * and defines data sources and local variables.
+ *
+ * Providers:
+ * - AWS: The AWS provider is required for managing AWS resources.
+ *
+ * Version Constraints:
+ * - Terraform: The minimum required version of Terraform is 1.1.0.
+ * - AWS Provider: The minimum required version of the AWS provider is 4.0.0.
+ *
+ * Data Sources:
+ * - aws_region: Retrieves the current AWS region.
+ * - aws_caller_identity: Retrieves the current AWS caller identity.
+ *
+ * Local Variables:
+ * - default_tags: A map of default tags, with the "vendor" tag set to "expel".
+ * - tags: Merges the variable tags with the default_tags, providing a final set of tags.
+ * - region: The name of the current AWS region.
+ * - customer_aws_account_id: The AWS account ID of the current caller identity.
+ */
 terraform {
   required_providers {
     aws = {
