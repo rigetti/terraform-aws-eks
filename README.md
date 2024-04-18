@@ -127,6 +127,22 @@ You can find an example of how to use this module in the [examples](examples) di
 See Expel's Getting Started Guide for Amazon EKS for options if you
 have an AWS Organization or already have a Kinesis data stream you want to re-use.
 
+## Issues
+
+Found a bug or have an idea for a new feature? Please [create an issue](https://github.com/expel-io/terraform-aws-eks/issues). We'll respond as soon as possible!
+
+## Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the Project.
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the Branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
+
+Please read our [Contributing Code of Conduct](CONTRIBUTING.md) to get started.
+
 <!-- begin-tf-docs -->
 ## Requirements
 
