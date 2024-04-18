@@ -50,7 +50,7 @@ variable "stream_capacity_mode" {
   type        = string
   default     = "ON_DEMAND"
 
-# Validation: Stream capacity mode must be one of ON_DEMAND, PROVISIONED.
+  # Validation: Stream capacity mode must be one of ON_DEMAND, PROVISIONED.
   validation {
     condition     = var.stream_capacity_mode == "ON_DEMAND" || var.stream_capacity_mode == "PROVISIONED"
     error_message = "Stream capacity mode must be one of ON_DEMAND, PROVISIONED."

@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "eks_consumer_iam_document" {
 
   # Allow Expel Workbench to retrieve data from Kinesis
   statement {
-    actions   = [
+    actions = [
       "kinesis:DescribeLimits",
       "kinesis:DescribeStream",
       "kinesis:DescribeStreamSummary",
@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "eks_consumer_iam_document" {
 
   # Allow Expel Workbench to gather information about EKS clusters
   statement {
-    actions   = [
+    actions = [
       "eks:AccessKubernetesApi",
       "eks:DescribeCluster",
       "eks:DescribeNodegroup",
