@@ -1,12 +1,45 @@
-# terraform-aws-eks
-Terraform module for configuring Amazon EKS to integrate with [Expel Workbench](https://workbench.expel.io/).
+# Terraform AWS EKS
 
-Configures a CloudWatch subscription filter to send data to a Kinesis data stream that
-[Expel Workbench](https://workbench.expel.io/) consumes.
+This Terraform module is designed to configure Amazon Elastic Kubernetes Service (EKS) to integrate with [Expel Workbench](https://workbench.expel.io/). The module sets up a CloudWatch subscription filter to send data to a Kinesis data stream, which is then consumed by Expel Workbench.
 
-:exclamation: Terraform state may contain sensitive information. Please follow best security practices when securing your state.
+> :exclamation: Terraform state may contain sensitive information. Please follow best security practices when securing your state.
+
+## Table of Contents
+
+- [Features](#features)
+- [Usage](#usage)
+- [Enabling k8s API Read-Only Access](#enabling-k8s-api-read-only-access)
+  - [Using `eksctl`](#1-using-eksctl)
+  - [Using Terraform](#2-using-terraform)
+- [AWS Documentation](#aws-documentation)
+- [Finishing Steps](#finishing-steps)
+- [Permissions](#permissions)
+- [Example](#example)
+- [Limitations](#limitations)
+- [Requirements](#requirements)
+- [Providers](#providers)
+- [Inputs](#inputs)
+- [Outputs](#outputs)
+- [Resources](#resources)
+- [Contributing](wip.CONTRIBUTING.md)
+
+## Features
+
+This Terraform module offers the following features:
+
+- **Amazon EKS Integration**: Seamlessly integrates your Amazon EKS setup with Expel Workbench for enhanced security monitoring.
+- **CloudWatch Subscription Filter**: Automatically configures a CloudWatch subscription filter to send data to a Kinesis data stream.
+- **Kinesis Data Stream**: Sets up a Kinesis data stream that is consumed by Expel Workbench, providing real-time data for security monitoring.
+- **Kubernetes API Read-Only Access**: Provides instructions for enabling read-only access to the Kubernetes API, either through `eksctl` or directly through Terraform.
+- **AWS Documentation**: Links to the full AWS documentation for additional guidance and support.
+- **Security Device Setup**: Guides you through the process of creating an AWS EKS security device on Expel Workbench to start monitoring your AWS environment.
+- **Permissions**: Allocates permissions that allow Expel Workbench to perform investigations and gain a broad understanding of your AWS footprint.
+- **Limitations**: Clearly outlines the limitations of the module, such as only supporting the onboarding of a single AWS account and always creating a new CloudWatch subscription filter and Kinesis data stream.
 
 ## Usage
+
+The use this module in a Terraform Script, users need to replace certain placeholders with their specific values, such as their organization's GUID from Expel Workbench, the AWS region where the Kinesis data stream will be created, and the log group name for EKS logs.
+
 ```hcl
 module "expel_aws_eks" {
   source  = "expel-io/k8s-control-plane/aws"
@@ -19,12 +52,14 @@ module "expel_aws_eks" {
 ```
 
 ### Enabling k8s API read only access
+
 This module does not map the Expel ARN to the kubernetes `expel-user` (necessary for our Benchmark Report). This requires modifying the `aws-auth` config map either through `eksctl` or terraform.
 
 ### 1. Using `eksctl`
 
 `eksctl` can update this map for you by running:
-```
+
+``` shell
 eksctl create iamidentitymapping \
     --cluster <your-cluster-name> \
     --region <your-region> \
@@ -33,16 +68,16 @@ eksctl create iamidentitymapping \
 ```
 
 You can confirm the mapping is created by running:
-```
+
+``` shell
 eksctl get iamidentitymapping --cluster <your-cluster-name> --region <your-region>
 ```
 
-**Full AWS docs** [here](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html
-).
-
 ### 2. Using terraform
+
 If you are using the official [EKS AWS module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest) you can update this with your existing EKS module
-```
+
+``` hcl
 module "eks" {
   [...]
 
@@ -58,27 +93,55 @@ module "eks" {
   ]
 ```
 
+### AWS Documentation
+
+You can find the full AWS documentation [here](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html).
+
 ### Validating mapping configuration
+
 Once completed you can confirm the mapping is created by running:
-```
+
+``` shell
 eksctl get iamidentitymapping --cluster <your-cluster-name> --region <your-region>
 ```
 
 ### Finishing steps
+
 Once you have configured your AWS environment, go to
-https://workbench.expel.io/settings/security-devices?setupIntegration=kubernetes_eks and create an AWS EKS
-security device to enable Expel to begin monitoring your AWS environment.
+[https://workbench.expel.io/settings/security-devices?setupIntegration=kubernetes_eks](https://workbench.expel.io/settings/security-devices?setupIntegration=kubernetes_eks) and create an AWS EKS security device to enable Expel to begin monitoring your AWS environment.
 
 ## Permissions
+
 The permissions allocated by this module allow Expel Workbench to perform investigations and get a broad understanding of your AWS footprint.
 
+## Example
+
+You can find an example of how to use this module in the [examples](examples) directory.
+
 ## Limitations
+
 1. Only supports onboarding a single AWS account, not an entire AWS Organization.
 2. Will always create a new CloudWatch subscription filter (AWS has a limit of 2 subscription filters per CloudWatch log group)
 3. Will always create a new Kinesis data stream.
 
 See Expel's Getting Started Guide for Amazon EKS for options if you
 have an AWS Organization or already have a Kinesis data stream you want to re-use.
+
+## Issues
+
+Found a bug or have an idea for a new feature? Please [create an issue](https://github.com/expel-io/terraform-aws-eks/issues). We'll respond as soon as possible!
+
+## Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the Project.
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the Branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
+
+Please read our [Contributing Code of Conduct](CONTRIBUTING.md) to get started.
 
 <!-- begin-tf-docs -->
 ## Requirements
