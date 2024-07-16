@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "assume_role_iam_document" {
 
 # This resource block defines an IAM role for Expel to assume.
 resource "aws_iam_role" "expel_assume_role" {
-  name               = "ExpelServiceAssumeRole"
+  name               = "${var.prefix}-ExpelServiceAssumeRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role_iam_document.json
   tags               = local.tags
 }
